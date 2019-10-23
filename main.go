@@ -2,11 +2,11 @@ package main
 
 import (
 	"encoding/json"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
+	v1 "bitbucket.org/virtualtrainer/strava-gate/api/v1"
 	"bitbucket.org/virtualtrainer/strava-gate/config"
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
@@ -39,12 +39,10 @@ func createApp() *cli.App {
 		e.Debug = !config.Vars.Release
 
 		e.Use(middleware.Logger())
-
 		e.Use(middleware.Recover())
 
-		e.GET("/", deadEnd)
-		e.GET("/test", test)
-		//e.GET("/api/travels", func(c echo.Context) error { return travels.GetTravels(c, db) })
+		e.POST("/v1/auth", v1.AuthHandler)
+		e.POST("/v1/deauth", v1.DeauthHandler)
 
 		e.Logger.Fatal(e.Start(":7000"))
 
@@ -52,14 +50,6 @@ func createApp() *cli.App {
 	}
 
 	return app
-}
-
-func deadEnd(c echo.Context) error {
-	return c.NoContent(http.StatusOK)
-}
-
-func test(c echo.Context) error {
-	return c.String(http.StatusOK, "It works!")
 }
 
 func setSignalListener() {

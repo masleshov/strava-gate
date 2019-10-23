@@ -2,9 +2,8 @@ create schema "strava-gate";
 
 create table "strava-gate".users
 (
-	user_id int not null
-		constraint users_pk
-			primary key,
+	user_id integer not null constraint users_pk primary key,
+	strava_user_id integer not null,
 	access_token varchar(50) not null,
 	refresh_token varchar(50) not null,
 	expires_to integer not null

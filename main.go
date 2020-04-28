@@ -43,6 +43,9 @@ func createApp() *cli.App {
 
 		e.POST("/v1/auth", v1.AuthHandler)
 		e.POST("/v1/deauth", v1.DeauthHandler)
+		e.POST("/v1/subscribe", v1.SubscribeHandler)
+		e.POST("/v1/webhook", v1.CallbackPostHandler)
+		e.GET("/v1/webhook", v1.CallbackGetHandler)
 
 		e.Logger.Fatal(e.Start(":7000"))
 

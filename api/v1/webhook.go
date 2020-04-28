@@ -20,7 +20,8 @@ type callbackGetRequest struct {
 	Mode, Token, Challenge string
 }
 
-// CallbackPostHandler should be called by Strava when data was changed
+// CallbackPostHandler GET(/v1/webhook, "object_type" string, "aspect_type" string, "object_id" int64, "owner_id" int64, "event_type" int64, "subscription_id" int)
+// Should be called by Strava when data was changed
 func CallbackPostHandler(c echo.Context) error {
 	req := new(callbackPostRequest)
 	if err := c.Bind(req); err != nil {
@@ -30,7 +31,8 @@ func CallbackPostHandler(c echo.Context) error {
 	return c.String(http.StatusOK, "")
 }
 
-// CallbackGetHandler should be called by Strava for checking accessibility of subscription initiator
+// CallbackGetHandler GET(/v1/webhook, "mode" string, "token" string, "challenge" string)
+// Should be called by Strava for checking accessibility of subscription initiator
 func CallbackGetHandler(c echo.Context) error {
 	req := new(callbackGetRequest)
 	if err := c.Bind(req); err != nil {
@@ -48,8 +50,8 @@ func CallbackGetHandler(c echo.Context) error {
 	return c.String(http.StatusOK, "{\"hub.challenge\":"+req.Challenge+"}")
 }
 
-// Subscribe initiates a subscription to Strava on some events
-func Subscribe() error {
+// SubscribeHandler POST(/v1/subscribe) initiates a subscription to Strava on some events
+func SubscribeHandler(c echo.Context) error {
 	params := make(map[string]string)
 	params["client_id"] = config.Vars.ClientID
 	params["client_secret"] = config.Vars.ClientSecret
@@ -61,5 +63,5 @@ func Subscribe() error {
 		return err
 	}
 
-	return nil
+	return c.String(http.StatusOK, "")
 }

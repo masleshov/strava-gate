@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-const verifyToken string = "ba5943e3-e0bc-49b5-9199-791bca96be05"
+const verifyToken string = "SOME_STRING"
 
 type callbackPostRequest struct {
 	ObjectType, AspectType       string
